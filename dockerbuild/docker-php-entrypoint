@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+set -x
+
+usermod -u $(stat -c %u /var/www/html) www-data
+mkdir /run/shm
+chmod 1777 /run/shm
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+	set -- apache2-foreground "$@"
+fi
+
+exec "$@"
